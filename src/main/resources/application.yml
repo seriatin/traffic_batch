@@ -1,0 +1,21 @@
+bus:
+  api:
+    station:
+      seoul:
+        job:
+          cron: 20 * * * * *
+
+spring:
+  batch:
+    initializer:
+      enabled: false
+    job:
+      enabled: false
+
+traffic:
+  jdbc:
+    postgresql:
+      driver: org.postgresql.Driver
+      url: jdbc:postgresql://localhost:5432/postgis_23_sample?charSet=UTF-8&ApplicationName=TrafficBatch
+      username: postgres
+      password: new1234!

@@ -4,6 +4,11 @@ bus:
       seoul:
         job:
           cron: 20 * * * * *
+        query: INSERT INTO bus_stop_info ( station_id, station_nm, gps_x, gps_y, station_own_id, pos_x, pos_y, gps ) VALUES ( :stationId, :stationNm, :gpsX, :gpsY, :stationOwnId, :posX, :posY, ST_Transform(ST_GeomFromText(:gps, 4326), 2097) )
+      gyeonggi:
+        query: INSERT INTO bus_stop_info ( region_cd, station_id, station_nm, gps_x, gps_y, station_own_id, region_nm, center_yn, gps ) VALUES ( :regionCd, :stationId, :stationNm, :gpsX, :gpsY, :stationOwnId, :regionNm, :centerYn, ST_Transform(ST_GeomFromText(:gps, 4326), 2097) ) ON CONFLICT ( station_id ) DO UPDATE SET region_cd = :regionCd, region_nm = :regionNm, station_own_id = :stationOwnId, center_yn = :centerYn
+      pusan:
+        query: INSERT INTO bus_stop_info ( station_id, station_nm, gps_x, gps_y, station_own_id, gps ) VALUES ( :stationId, :stationNm, :gpsX, :gpsY, :stationOwnId, ST_Transform(ST_GeomFromText(:gps, 4326), 2097) ) ON CONFLICT ( station_id ) DO UPDATE SET station_own_id = :stationOwnId
 
 spring:
   batch:
@@ -11,11 +16,9 @@ spring:
       enabled: false
     job:
       enabled: false
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgis_23_sample?charSet=UTF-8&ApplicationName=TrafficBatch
+    username: postgres
+    password: new1234!
 
-traffic:
-  jdbc:
-    postgresql:
-      driver: org.postgresql.Driver
-      url: jdbc:postgresql://localhost:5432/postgis_23_sample?charSet=UTF-8&ApplicationName=TrafficBatch
-      username: postgres
-      password: new1234!

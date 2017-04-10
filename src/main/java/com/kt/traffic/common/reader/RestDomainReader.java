@@ -1,5 +1,6 @@
 package com.kt.traffic.common.reader;
 
+import com.kt.traffic.bus.domain.PusanBusStationInfoVO;
 import com.kt.traffic.bus.domain.SeoulBusStationInfoVO;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -19,15 +20,15 @@ import java.util.List;
  */
 public class RestDomainReader<E, T> implements ItemReader<E> {
 
-    private final String apiUrl;
-    private final String apiKey;
-    private final URI apiUri;
-    private final RestTemplate restTemplate;
+    protected final String apiUrl;
+    protected final String apiKey;
+    protected final URI apiUri;
+    protected final RestTemplate restTemplate;
     // private final ParameterizedTypeReference<Resource<T>> typeReference;
-    private Class<T> clazz;
+    protected Class<T> clazz;
 
-    private int nextItemIndex;
-    private List<E> items;
+    protected int nextItemIndex;
+    protected List<E> items;
 
     public RestDomainReader(String apiUrl, String apiKey, URI apiUri, RestTemplate restTemplate, Class<T> clazz) {
         this.apiUrl = apiUrl;
@@ -56,11 +57,11 @@ public class RestDomainReader<E, T> implements ItemReader<E> {
         return nextItem;
     }
 
-    private boolean itemsNotInitialized() {
+    protected boolean itemsNotInitialized() {
         return this.items == null;
     }
 
-    private List<E> fetchDataFromAPI() {
+    protected List<E> fetchDataFromAPI() {
         /*ResponseEntity<Resource<T>> responseEntity;
         if ( apiUri != null ) {
             responseEntity = restTemplate.exchange(this.apiUri, HttpMethod.GET, HttpEntity.EMPTY, typeReference);
@@ -79,6 +80,8 @@ public class RestDomainReader<E, T> implements ItemReader<E> {
                 Object response = responseEntity.getBody();
                 if ( response instanceof SeoulBusStationInfoVO) {
                     return (List<E>)((SeoulBusStationInfoVO) response).items();
+                } else if ( response instanceof PusanBusStationInfoVO ) {
+                    return (List<E>)((PusanBusStationInfoVO) response).items();
                 }
             }
         }

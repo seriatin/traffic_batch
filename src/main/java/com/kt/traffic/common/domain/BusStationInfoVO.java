@@ -19,4 +19,10 @@ public class BusStationInfoVO {
 
     private double posX;
     private double posY;
+
+    private String gps;
+
+    public String getGps() {
+        return "POINT(" + gpsX + " " + gpsY + ")";
+    }
 }
